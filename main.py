@@ -1,5 +1,6 @@
 import sys
 import pygame
+import pygame.freetype
 from constants import *
 from shot import Shot
 from player import Player
@@ -12,6 +13,12 @@ def main():
 
 	# Screen
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+	# Font for text in the game
+	GAME_FONT = pygame.freetype.SysFont(None, 30)
+
+	# Current score of the player
+	score = 0
 
 	# Internal clock
 	clock = pygame.time.Clock()
@@ -35,27 +42,32 @@ def main():
 	asteroid_field = AsteroidField()
 
 	# Frame loop
-	while True:
+	run = True
+	while run:
 		for event in pygame.event.get(): # Closes window if the X is hit
 			if event.type == pygame.QUIT:
-				return
+				run = False
 		
 		screen.fill("black") # Background color
-
+		
 		updatables.update(dt) # Updates these every frame
-
+		
 		# Checks collisions with asteroids
 		for asteroid in asteroids:
 			if player.is_colliding(asteroid): # If player collides with asteroid, ends game
-				print("Game over!")
+				print(f"Game over!\nScore was: {score}")
 				sys.exit()
 			for shot in shots: # Finds if each bullet hit an asteroid, if it did, kill both
 				if shot.is_colliding(asteroid):
 					shot.kill()
 					asteroid.split()
+					score += 1
 
 		for obj in drawables: # Draws each every frame
 			obj.draw(screen)
+
+		# Renders the text to screen for score
+		GAME_FONT.render_to(screen, (SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.1), str(score), (255, 255, 255))
 		
 		pygame.display.flip() # Updates the screen
 
