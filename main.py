@@ -67,7 +67,7 @@ def main():
 			obj.draw(screen)
 
 		# Renders the text to screen for score
-		GAME_FONT.render_to(screen, (SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.1), str(score), (255, 255, 255))
+		GAME_FONT.render_to(screen, (SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.1), str(score), (255, 255, 255))
 		
 		pygame.display.flip() # Updates the screen
 
